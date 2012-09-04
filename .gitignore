@@ -1,4 +1,11 @@
-*.vo
-*.glob
-*.v.d
 
+# Ocaml compilation files
+*.annot
+*.cmo
+*.cma
+*.cmi
+*.a
+*.o
+*.cmx
+*.cmxs
+*.cmxa
