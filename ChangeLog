@@ -1,0 +1,16 @@
+2012-09-06  Francois Ripault <francois.ripault@epita.fr>
+
+	Add first bunch of test files
+	* test-suite/emphasis.v:
+	* test-suite/hide.v:
+	* test-suite/hrule.v:
+	* test-suite/html.v:
+	* test-suite/latex.v:
+	* test-suite/lists.v:
+	* test-suite/pretty_printing.v:
+	* test-suite/sections.v:
+	* test-suite/show.v:
+	* test-suite/verbatim.v:
+	* test-suite/Makefile: Add test files for upcoming test suite
+
+	* test-suite/links.v: Reference file taken from official repository
