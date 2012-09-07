@@ -1,7 +1,21 @@
 (* Test file for pretty printing *)
 
-(** special char test: <> ~ % ~ % # ~ # ~ *)
+Parameter P Q R : Prop.
+Theorem imp_trans : (P -> Q) -> (Q -> R) -> P -> R.
+Proof.
+  auto.
+Qed.
 
-(** printing \ # &#64; # *)
-
-(** test custom char: \ *)
+(** All characters *)
+Theorem t : a -> a.
+Theorem t : a <- a.
+Theorem t : a *  a.
+Theorem t : a <= a.
+Theorem t : a >= a.
+Theorem t : a => a.
+Theorem t : a <> a.
+Theorem t : a <-> a.
+Theorem t : a |- a.
+Theorem t : a \/ a.
+Theorem t : a /\ a.
+Theorem t : a ~  a.

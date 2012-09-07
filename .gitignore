@@ -1,5 +1,10 @@
 
+# Temporary files
+
+.tmp
+
 # Ocaml compilation files
+
 *.annot
 *.cmo
 *.cma
@@ -9,3 +14,10 @@
 *.cmx
 *.cmxs
 *.cmxa
+
+# Test-suite temporary files
+.result
+.log
+.sty
+.css
+.html

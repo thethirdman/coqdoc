@@ -1,3 +1,9 @@
+2012-09-07  Francois Ripault <francois.ripault@epita.fr>
+
+	Minor patch
+	* test-suite/pretty_printing.v: Now checks for all special characters
+	documented
+
 2012-09-06  Francois Ripault <francois.ripault@epita.fr>
 
 	Add first bunch of test files

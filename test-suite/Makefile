@@ -20,7 +20,7 @@ latex.result: latex.v
 	@printf "Testing $< \n"; \
 	REF=`mktemp ref.XXX`; \
 	NEW=`mktemp new.XXX`; \
-	coqdoc $< -o result/$@ 2> /dev/null;  \
+	coqdoc $< --utf8 -o result/$@ ; \
 	cp $${REF} $${NEW}; \
 	RET=`$${DIFFTOOL} diff $${REF} $${NEW} > log/$@.log` ; \
 	rm $${NEW} $${REF}
