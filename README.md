@@ -1,4 +1,0 @@
-coqdoc
-======
-
-Reimplementation of coqdoc
