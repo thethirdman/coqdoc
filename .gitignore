@@ -14,6 +14,9 @@
 *.cmx
 *.cmxs
 *.cmxa
+_build
+coqdoc.native
+out.txt
 
 # Test-suite temporary files
 .result

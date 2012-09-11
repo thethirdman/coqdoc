@@ -1,0 +1,8 @@
+This is a sample documentation file
+
+this is sample code sent to coqtop
+
+this is a keyword
+@code{ <call val="interp">Check 5.</call> }
+
+this is an inline keyword @code{ <call val="interp">Check 5.</call> } after @code{}

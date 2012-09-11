@@ -1,5 +1,8 @@
 TODO LIST FOR COQDOC
 
+Coqdoc POC:
+  - manage command over multiple lines
+
 Test suite :
   - Add test file for hyperlinks
   - Fix pretty printing test file
