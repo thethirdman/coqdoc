@@ -3,3 +3,4 @@ Keywords ideas :
   - various formatting commands @latex, @format, ...
   - @command for something macro-like (richer than @code and @latex)
   - @shell would execute a shell command (would allow the user to get rich facilities)
+  - @include & @line ?

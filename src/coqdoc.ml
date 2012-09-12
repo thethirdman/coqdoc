@@ -18,6 +18,7 @@ let gen_doc () =
   Parser.parse_file ic oc !file !output;
   Unix.kill pid Sys.sigkill
 
+(* Function for parsing anonymous arguments *)
 let parse_anon = function
   s when Sys.file_exists s -> file := s;
       | x -> raise (Arg.Bad ("Invalid argument: " ^ x))
