@@ -2,6 +2,7 @@ TODO LIST FOR COQDOC
 
 Coqdoc POC:
   - manage command over multiple lines
+  - make xml protocol stand alone
 
 Test suite :
   - Add test file for hyperlinks

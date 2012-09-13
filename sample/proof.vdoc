@@ -1,0 +1,12 @@
+This is a proof
+
+@code{Parameters P Q R : Set.}
+@code{Theorem foo : (P->Q) -> (Q -> R) -> P -> R.}
+
+Show the goal:
+@goal{}
+
+@code{intros.}
+
+Show the second goal:
+@goal{}

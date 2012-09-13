@@ -3,6 +3,6 @@ This is a sample documentation file
 this is sample code sent to coqtop
 
 this is a keyword
-@code{ <call val="interp">Check 5.</call> }
+@code{Check 5.}
 
-this is an inline keyword @code{ <call val="interp">Check 5.</call> } after @code{}
+this is an inline keyword @code{Check 5.} after @code{}
