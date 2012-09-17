@@ -35,7 +35,7 @@ let open_process_pid prog args =
 
   (*FIXME: have real coqtop path *)
 let spawn args =
-  let prog = "coqtop" in
+  let prog = "/home/ripault/Prog/coq/trunk/bin/" ^ "coqtop"  ^ ".byte" in
   let args = Array.of_list (prog :: "-ideslave" :: args) in
   let (pid, ic, oc) = open_process_pid prog args in
   let p = Xml_parser.make (Xml_parser.SChannel ic) in
@@ -52,21 +52,23 @@ let eval_call coqtop logger (c:'a Serialize.call) =
   let rec loop () =
     let xml = Xml_parser.parse coqtop.xml_parser in
     if Serialize.is_message xml then
+      begin
       let message = Serialize.to_message xml in
       let level = message.Interface.message_level in
       let content = message.Interface.message_content in
       let () = logger level content  in
       loop ()
-    else (Serialize.to_answer xml : 'a Interface.value)
+      end
+    else (Serialize.to_answer xml c)
   in
   try
     Xml_utils.print_xml coqtop.cin (Serialize.of_call c);
     flush coqtop.cin;
     loop ()
   with
-  | Serialize.Marshal_error ->
+  | Serialize.Marshal_error s ->
     (* the protocol was not respected... *)
-    raise Serialize.Marshal_error
+    raise (Serialize.Marshal_error s)
   | err ->
     (* if anything else happens here, coqtop is most likely dead *)
     let msg = Printf.sprintf "Error communicating with pid [%i]: %s"
@@ -120,10 +122,12 @@ let goals coqtop =
 let interp coqtop log ?(raw=false) ?(verbose=true) s =
   eval_call coqtop log (Serialize.interp (raw,verbose,s))
 
+
 let hints coqtop = eval_call coqtop default_logger Serialize.hints
 let inloadpath coqtop s = eval_call coqtop default_logger (Serialize.inloadpath s)
 let mkcases coqtop s = eval_call coqtop default_logger (Serialize.mkcases s)
 let rewind coqtop i = eval_call coqtop default_logger (Serialize.rewind i)
 let search coqtop flags = eval_call coqtop default_logger (Serialize.search flags)
 let status coqtop = eval_call coqtop default_logger Serialize.status
+let parse coqtop s = eval_call coqtop default_logger (Serialize.parse s)
 end

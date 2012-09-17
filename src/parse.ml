@@ -31,6 +31,15 @@ module Parser = struct
        ^ (List.fold_left (fun b a -> b ^ ((print_goal "\t" a))) "" opt.fg_goals)
        |_ -> ""
 
+  let treat_parse content coqtop =
+    Printexc.record_backtrace true;
+    try
+      match (Coqtop.parse coqtop content) with
+    |Good ret | Unsafe ret -> begin
+      print_string ("loc is: " ^ (string_of_int ret.loc_end) ^ "\n");
+        print_string ("markup is: " ^ ret.markup ^ "\n"); "" end
+    | _ -> raise (Invalid_keyword "parse")
+      with e -> Printexc.print_backtrace stdout; raise (Invalid_keyword "bt")
 
   let rec parse_line coqtop line =
     if Str.string_match command line 0 then
@@ -43,9 +52,10 @@ module Parser = struct
         (match kw with
         | "code" -> treat_content content coqtop
         | "goal" -> treat_goals content coqtop
+        | "parse" -> treat_parse content coqtop
         | s -> raise (Invalid_keyword s))
         ^ after)
-      end
+    end
     else
       line
 
