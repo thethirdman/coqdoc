@@ -38,6 +38,10 @@ Objectifs:
   - Commencer à concevoir le front-end, notamment en liant commentaires et
     le code source associé
 
+Idées:
+  - Mettre un hook si des fichiers concernant Yann sont mis à jours (tout ce
+    qui est .txt notamment), qui lui enverrait un email.
+
 
 ===============================================================================
  Reunion du 14 septembre

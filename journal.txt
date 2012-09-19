@@ -2,6 +2,8 @@
 | Development journal for coqdoc project |
 ------------------------------------------
 
+
+
 18/09/12:
   - Definir clairement ce que l'on veut obtenir de parser: identifiants, mots clefs ?
     (doit permettre de définir un type, et de savoir quels éléments on doit extraire de l'AST)
