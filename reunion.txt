@@ -1,0 +1,110 @@
+===============================================================================
+ Reunion du 19 Septembre
+===============================================================================
+
+Retour de parse: Location x Metadata
+
+  (metadata est pour l'instant du unit, l'objectif à terme est qu'il soit
+  un conteneur nous permettant d'inclure des informations venant des AST, et
+  également d'autres informations telles que les mots clefs (venant soit d'un
+  CST, soit du parser/lexer modifié)
+
+Il a également été question de rajouter des __requêtes__ nous permettant
+d'obtenir:
+  1 - le résultat de l'évaluation de la commande envoyée par parse
+  2 - l'état de coq suite à l'interpétation de cette commande
+
+1: L'objectif est d'obtenir le résultat d'une commande parsée, sans avoir à
+  renvoyer cette commande. Deux approches sont possible:
+    - On garde un historique coté coq, qui nous permettrait de demander
+      l'évaluation d'une chaine parsée.
+    - On récupère les métadatas correspondant à la chaîne parsée, et également
+      le résultat de son évaluation coté coqdoc. Cela a l'avantage d'être
+      moins instrusif coté coq (pas d'historique à tenir, etc ...), tout en
+      offrant les mêmes possibilités à l'utilisateur. Il faut cependant
+      donner le contrôle à l'utilisateur concernant l'évaluation d'une requête
+      parse (A discuter)
+
+2: Cela m'apparait comme flou (qu'est ce que l'état de coq ??). Cependant,
+  il existe déjà certaines requêtes qui rentrent dans cette définition:
+    - goals, qui nous permettent de connaitre les buts d'une preuve en cours
+    - evars, nous informant sur les variables existentielles définies
+    - hints, permettant d'obtenir les preuves applicables à l'état courant
+    - status, donnant le statut de coq (comme le décrit le commentaire de
+      serialize.mli "ready in some section, proving Foo")
+
+Objectifs:
+  - Finir l'interaction XML (implem le type présenté ci-dessus)
+  - Commencer à concevoir le front-end, notamment en liant commentaires et
+    le code source associé
+
+
+===============================================================================
+ Reunion du 14 septembre
+===============================================================================
+
+Nouvelle commande: parse
+
+parse: str (deviendrait un chunk plus tard) -> annotated_feedback
+
+type annotated_feedback = | Parse_error
+                          | Sentence
+
+type sentence = { end : int | int X int (depends on relative or absolute pos)
+                  kind: |Vernac |Gallina |Tac
+                  markup: annotation list}
+
+type annotation = { Pos X {Keyword | Ref const | Declared const}
+
+Dans l'ideal: Ecrire un CST
+
+
+      ___Pretty Print__
+      |                |
+      |                |
+    Source ---------> CST ---------> Vernac Expr
+
+
+Requete:
+  -> Fin de phrase
+  -> Type de phrase
+  -> Ensemble des buts résolus
+
+
+Utilité d'un mode asynchrone ??
+
+===============================================================================
+ Reunion du 3 septembre
+===============================================================================
+
+Fonctionnement actuel :
+                                | html
+ - Code source (.v) | coqdoc    | latex
+ - .glob            |---------->| manpage
+
+Cas d'utilisation pour coq :
+  - Doc de dev
+  - Man page
+  - Literate programming (RTFM)
+  - Ecriture papers
+  - Documentation interactive (avec javascript & co)
+  - What else ... ?
+
+Qualitatif :
+  - Utilisation des infos récoltées pas le compilateur
+    pour générer la doc
+
+design de coqdoc :
+
+                 _______
+                 |      |
+  .v    |        |     .v
+  .tex  |----> .vdoc /
+  .vdoc |            \ .html
+  .html |
+
+  .vdoc : fichier de doc pour coq, se sert des infos de compil
+
+
+  Gallina :
+    Idée d'enrichir le .vo avec des metadatas relatives au code (genre symboles)
