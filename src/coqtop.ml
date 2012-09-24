@@ -5,9 +5,7 @@ module Coqtop = struct
 exception Coqtop_crash
 
 type coqtop = {
-  (*sup_args : string list;*)
   pid : int;
-  (* Unix process id *)
   cout : in_channel;
   cin : out_channel;
   xml_parser : Xml_parser.t;
@@ -35,7 +33,7 @@ let open_process_pid prog args =
 
   (*FIXME: have real coqtop path *)
 let spawn args =
-  let prog = "/home/ripault/Prog/coq/trunk/bin/" ^ "coqtop"  ^ ".byte" in
+  let prog = "coqtop" in
   let args = Array.of_list (prog :: "-ideslave" :: args) in
   let (pid, ic, oc) = open_process_pid prog args in
   let p = Xml_parser.make (Xml_parser.SChannel ic) in
@@ -111,18 +109,15 @@ struct
 
 end
 
+(* Interface to interact with coqtop *)
 let evars coqtop =
   let () = PrintOpt.enforce_hack coqtop in
   eval_call coqtop default_logger Serialize.evars
-
 let goals coqtop =
   let () = PrintOpt.enforce_hack coqtop in
   eval_call coqtop default_logger Serialize.goals
-
 let interp coqtop log ?(raw=false) ?(verbose=true) s =
   eval_call coqtop log (Serialize.interp (raw,verbose,s))
-
-
 let hints coqtop = eval_call coqtop default_logger Serialize.hints
 let inloadpath coqtop s = eval_call coqtop default_logger (Serialize.inloadpath s)
 let mkcases coqtop s = eval_call coqtop default_logger (Serialize.mkcases s)

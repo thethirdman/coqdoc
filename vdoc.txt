@@ -1,0 +1,34 @@
+===============================================================================
+  .Vdoc definition file
+===============================================================================
+
+Le fichier .vdoc est une représentation intermédiaire entre les fichiers
+sources (.v et .tex) et les fichiers de sorties.
+Celui regroupe les éléments nécessaires pour permettre d'obtenir une
+documentation sans aucune autre intéraction nécessaire (pas de .glob, pas
+d'interaction avec coqtop). Les intéractions se feront lors de la compilation
+vers ce .vdoc.
+          ----------                   ----------
+.v ------>|        |                   |        |-----> .tex
+          | Coqdoc |-----> .vdoc ----->| Coqdoc |-----> .html
+.tex ---->|        |                   |        |-----> ...
+          ----------                   ----------
+
+Le .vdoc doit gérer les éléments suivants:
+
+  - Elements de structuration de la sortie (sections, pretty print, ...)
+    On veut avoir une extensibilité sur le pretty print par exemple;
+
+  - Permettre une personnalisation dans le format de sortie: pour du .tex,
+    on veut avoir le choix sur la mise en page & co. Applicable également
+    pour le html, etc ...
+
+  - Contient les codes source (touls des .v d'un projet), et les métadatas
+    associées:
+      - résultats d'interprétation
+      - symboles définis
+      - FILL ME
+
+Par raport aux métadatas du code, on veut implanter des mécanismes de
+controles (références à un snippet, un symbole, afficher des types, ...)
+

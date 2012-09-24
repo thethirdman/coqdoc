@@ -1,7 +1,8 @@
 
 # Temporary files
 
-.tmp
+*.tmp
+*.log
 
 # Ocaml compilation files
 
