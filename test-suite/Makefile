@@ -15,12 +15,12 @@ latex.result: latex.v
 	@coqdoc -latex -g $< -o result/$@ 2> /dev/null
 
 
-%.result: %.v
+%.result: doc/%.v
 	@mkdir -p log result
 	@printf "Testing $< \n"; \
 	REF=`mktemp ref.XXX`; \
 	NEW=`mktemp new.XXX`; \
-	coqdoc $< --utf8 -o result/$@ ; \
+	coqdoc $< --utf8 -o result/$@ 2>>coqdoc.log; \
 	cp $${REF} $${NEW}; \
 	RET=`$${DIFFTOOL} diff $${REF} $${NEW} > log/$@.log` ; \
 	rm $${NEW} $${REF}

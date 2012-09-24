@@ -68,7 +68,7 @@ let eval_call coqtop logger (c:'a Serialize.call) =
   with
   | Serialize.Marshal_error s ->
     (* the protocol was not respected... *)
-    raise (Serialize.Marshal_error s)
+      print_string s; raise (Serialize.Marshal_error s)
   | err ->
     (* if anything else happens here, coqtop is most likely dead *)
     let msg = Printf.sprintf "Error communicating with pid [%i]: %s"

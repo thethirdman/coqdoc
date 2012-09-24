@@ -2,11 +2,14 @@
 | Development journal for coqdoc project |
 ------------------------------------------
 
-
+24/09/12
+  - Extraction des coordonnées dans l'AST faite
 
 18/09/12:
-  - Definir clairement ce que l'on veut obtenir de parser: identifiants, mots clefs ?
-    (doit permettre de définir un type, et de savoir quels éléments on doit extraire de l'AST)
+  - Definir clairement ce que l'on veut obtenir de parser: identifiants,
+      mots clefs ?
+      (doit permettre de définir un type, et de savoir quels éléments on
+      doit extraire de l'AST)
 
 
   - Décider à propos de la refonte complète du protocole  (pour suivre

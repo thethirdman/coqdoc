@@ -31,13 +31,20 @@ module Parser = struct
        ^ (List.fold_left (fun b a -> b ^ ((print_goal "\t" a))) "" opt.fg_goals)
        |_ -> ""
 
+  let print_locmeta locmeta =
+    match (fst locmeta) with
+    Some x -> print_int (fst x); print_string " "; print_int (snd x);
+    print_string "\n"
+    | None -> ()
+
   let treat_parse content coqtop =
     Printexc.record_backtrace true;
     try
       match (Coqtop.parse coqtop content) with
     |Good ret | Unsafe ret -> begin
       print_string ("loc is: " ^ (string_of_int ret.loc_end) ^ "\n");
-        print_string ("markup is: " ^ ret.markup ^ "\n"); "" end
+      List.iter print_locmeta ret.markup; ""
+    end
     | _ -> raise (Invalid_keyword "parse")
       with e -> Printexc.print_backtrace stdout; raise (Invalid_keyword "bt")
 
