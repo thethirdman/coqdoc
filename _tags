@@ -2,5 +2,4 @@
 <src/coqdoc.{native,byte}>: package(str), package(unix), use_clib, rectypes, use_lib
 
 <src/*.ml{,i}>: package(str), package(unix), use_clib, rectypes, use_lib
-
 true: annot, debug

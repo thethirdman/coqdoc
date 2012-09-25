@@ -2,6 +2,12 @@
 | Development journal for coqdoc project |
 ------------------------------------------
 
+25/09/12
+  - Patch les coordonnées de l'AST
+  - Le lexer de coqdoc-old est intégré. Il faut finaliser la conversion
+    entrée -> AST (pour l'instant, seulement le verbatim)
+  - Ajout d'un fichier vdoc.ml qui contient le type Vdoc (début d'ast)
+
 24/09/12
   - Extraction des coordonnées dans l'AST faite
 
