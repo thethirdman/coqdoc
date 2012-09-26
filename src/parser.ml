@@ -15,8 +15,8 @@ module Parser = struct
     | Fail (loc,s)  -> raise (Invalid_keyword s)
 
     (* Parsing function for a .v file *)
-  let rec parse_vernac coqtop file =
-    Cpretty.coq_bol file
+  let rec parse_vernac coqtop file = ()
+    (*Cpretty.coq_bol file*)
 
   type context =
     Nothing
@@ -29,7 +29,7 @@ module Parser = struct
   and begin_section = Str.regexp ".*\\\\begin{coq_\\(.*\\)}.*"
 
   (* Parsing function for a .tex file *)
-  let rec parse_coqtex coqtop line =
+  (*let rec parse_coqtex coqtop line =
     if Str.string_match begin_section line 0 then
       if (Str.matched_group 1 line) = "example" then in_coqtex := Example
       else if (Str.matched_group 1 line) = "example*" then in_coqtex :=
@@ -41,13 +41,11 @@ module Parser = struct
     else if !in_coqtex <> Nothing then
       let ret = (Coqtop.parse coqtop line) in
       match !in_coqtex with
-      | Example ->
-          Vdoc.add (Vdoc.Parse (line, (extract_value ret)))
-      | Example_star -> Vdoc.add(Vdoc.Raw line)
+      | Example -> ()
+      | Example_star -> ()
       | Eval -> ()
       | _ -> assert false
-    else
-      Vdoc.add (Vdoc.Raw line)
+    else*)
 
   (*let get_parse_function file =
     if Filename.check_suffix file ".tex" then
@@ -62,9 +60,7 @@ module Parser = struct
       parse_vernac coqtop (from_channel src_file);
       (*while true do
         parse_fn coqtop (input_line src_file);*)
-      Vdoc.pretty_print ();
       (*done;*)
-      print_string "\n\nend\n\n";
       with End_of_file -> close_in src_file; close_out dst_file;
 
 end

@@ -1,7 +1,7 @@
 (* Main definition file for coqdoc *)
 
 open Coqtop
-open Parse
+open Parser
 
 (* Coqdoc's command line parser *)
 let usage = "This is coqdoc ...\nUsage: "
