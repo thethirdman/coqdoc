@@ -1,30 +1,41 @@
 (* Main definition file for coqdoc *)
 
 open Coqtop
+open Lexer
+open Lexing
 open Parser
 
-(* Coqdoc's command line parser *)
-let usage = "This is coqdoc ...\nUsage: "
+  (* Coqdoc's command line parser *)
+  let usage = "This is coqdoc ...\nUsage: "
           ^ Sys.argv.(0) ^ " [options] [files]\n"
-let file = ref "" and output = ref ""
+  let file = ref "" and output = ref ""
 
-let speclist = [
-  ("-o", Arg.String (fun s -> output := s), "Specify output file")]
+  let speclist = [
+    ("-o", Arg.String (fun s -> output := s), "Specify output file")]
 
-(* Function for parsing anonymous arguments *)
-let parse_anon = function
-  s when Sys.file_exists s -> file := s;
+  (* Function for parsing anonymous arguments *)
+  let parse_anon = function
+    s when Sys.file_exists s -> file := s;
       | x -> raise (Arg.Bad ("Invalid argument: " ^ x))
 
-let _ =
-  Arg.parse speclist parse_anon usage;
+  let _ =
+    Arg.parse speclist parse_anon usage;
       if !file <> "" then
         begin
           if !output = "" then
             output := "out.txt";
         (*FIXME: add arg mngmnt for coqtop *)
         let ct = Coqtop.spawn [] in
-        Parser.parse_file ct !file !output
+        let src_file = open_in !file and dst_file = open_out !output in
+        let lexbuf = from_channel src_file in
+        try
+          while true do
+            let ret = Parser.main document lexbuf in
+            match ret with
+            | Vdoc.Doc s -> print_string ("Doc: " ^ s ^ "\n");
+            | Vdoc.Code s -> print_string ("Code: " ^ s ^ "\n");
+          done
+            with Vdoc.End_of_file -> ()
         end
-      else
-        print_string usage
+          else
+            print_string usage

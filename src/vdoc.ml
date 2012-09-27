@@ -7,6 +7,8 @@ open Interface
  * Output files (.html, .tex)
  *)
 
-module Vdoc = struct
+exception End_of_file
 
-end
+type source =
+  | Doc of string (* FIXME *)
+  | Code of string

@@ -5,6 +5,7 @@ open Interface
 open Coqtop
 open Vdoc
 open Lexing
+open Lexer
 
 module Parser = struct
   exception Invalid_keyword of string
@@ -57,10 +58,11 @@ module Parser = struct
     let src_file = open_in src and dst_file = open_out dest
     (*and parse_fn = get_parse_function src *) in
     try
-      parse_vernac coqtop (from_channel src_file);
+      let ret = document (from_channel src_file);
       (*while true do
         parse_fn coqtop (input_line src_file);*)
       (*done;*)
+      Parser.main ret;
       with End_of_file -> close_in src_file; close_out dst_file;
 
 end
