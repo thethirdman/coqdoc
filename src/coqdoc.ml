@@ -32,8 +32,8 @@ open Parser
           while true do
             let ret = Parser.main document lexbuf in
             match ret with
-            | Vdoc.Doc s -> print_string ("Doc: " ^ s ^ "\n");
-            | Vdoc.Code s -> print_string ("Code: " ^ s ^ "\n");
+            | Vdoc.Comment s -> print_string ("(*" ^ s ^ "*)")
+            | Vdoc.Code s -> print_string s
           done
             with Vdoc.End_of_file -> ()
         end

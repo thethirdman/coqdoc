@@ -10,5 +10,5 @@ open Interface
 exception End_of_file
 
 type source =
-  | Doc of string (* FIXME *)
+  | Comment of string
   | Code of string
