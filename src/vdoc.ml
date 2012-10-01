@@ -11,4 +11,24 @@ exception End_of_file
 
 type source =
   | Comment of string
+  | Doc of string
   | Code of string
+
+type raw_content =
+  { latex : string;
+    latex_math : string;
+    html : string
+  }
+
+type doc =
+  Vernac of string
+  | Pretty_print of string
+  | Add_token of string*raw_content
+  | Rm_token of string
+  | Section of (int*string)
+  | Elt_list of (int*string) (*FIXME: replace with type doc *)
+  | Hrule
+  | Emphasis of string (*FIXME: replace with type doc *)
+  | Raw of raw_content
+  | Verbatim of string
+  | Content of string
