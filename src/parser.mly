@@ -2,8 +2,9 @@
 
 %token EOF STARTCOM ENDCOM STARTDOC STARTVERNAC ENDVERNAC
 %token STARTPP ENDPP STARTVERBATIM ENDVERBATIM HRULE
-%token EMPHASIS LATEX LATEX_MATH HTML
-%token <int*string> SECTION LST
+%token EMPHASIS LATEX LATEX_MATH HTML ENDLST
+%token <int> LST
+%token <int*string> SECTION
 %token <string> CONTENT
 
 %start main parse_doc /* FIXME: good return type */
@@ -23,18 +24,24 @@ STARTCOM CONTENT ENDCOM
   {raise Vdoc.End_of_file}
 
 parse_doc:
+  lst = list(parse_term) EOF
+    {Vdoc.List lst}
+  | EMPHASIS lst=list (parse_term) EMPHASIS
+    {Vdoc.Emphasis lst}
+  | LST lst=list(parse_term) ENDLST
+    {Vdoc.Item $1,lst}
+
+parse_term:
 STARTVERNAC CONTENT ENDVERNAC
   {Vdoc.Vernac $2}
 | STARTPP CONTENT ENDPP
   {Vdoc.Pretty_print $2}
+| STARTVERBATIM CONTENT ENDVERBATIM
+  {Vdoc.Verbatim $2}
 | SECTION
   {Vdoc.Section $1}
-| LST
-  {Vdoc.Elt_list $1}
 | HRULE
   {Vdoc.Hrule}
-| EMPHASIS CONTENT EMPHASIS
-  {Vdoc.Emphasis $2}
 | LATEX CONTENT LATEX
   {Vdoc.Raw {Vdoc.latex = $2; Vdoc.latex_math=""; Vdoc.html="";}}
 | LATEX_MATH CONTENT LATEX_MATH
@@ -42,4 +49,6 @@ STARTVERNAC CONTENT ENDVERNAC
 | HTML CONTENT HTML
   {Vdoc.Raw {Vdoc.latex = ""; Vdoc.latex_math=""; Vdoc.html=$2;}}
 | CONTENT
-  { Vdoc.Content $1}
+  {Vdoc.Content $1}
+(*| EOF
+  {Vdoc.List []}*)

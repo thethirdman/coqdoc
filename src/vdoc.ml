@@ -26,9 +26,14 @@ type doc =
   | Add_token of string*raw_content
   | Rm_token of string
   | Section of (int*string)
-  | Elt_list of (int*string) (*FIXME: replace with type doc *)
+  | Item of (int*doc) (* List in coqdoc *)
   | Hrule
-  | Emphasis of string (*FIXME: replace with type doc *)
+  | Emphasis of doc (*FIXME: replace with type doc *)
   | Raw of raw_content
   | Verbatim of string
   | Content of string
+  | List of doc list
+
+let rec insert elt = function
+  | List lst -> List (elt::lst)
+  | n        -> List (elt::n::[])
