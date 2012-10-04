@@ -10,7 +10,7 @@ module Ident = struct
       | Vdoc.Vernac s -> printf "[%s]" s
       | Vdoc.Pretty_print s -> printf "[[%s]]" s
       | Vdoc.Section (a,b) -> printf "%*s*%s" a "" b
-      | Vdoc.Elt_list (a,b) -> printf "%*s-%s" a "" b(*FIXME: replace with type doc *)
+      | Vdoc.Item (a,b) -> printf "%*s-%s" a "" ""(*FIXME: replace with type doc *)
       | Vdoc.Emphasis s -> printf "_"; aux s; printf "_"
       | Vdoc.Raw s -> print_string ("raw")
       | Vdoc.Verbatim s -> printf "<<%s>>" s

@@ -1,11 +1,10 @@
-OPT=-menhir
 all: coqdoc
 
 coqdoc:
-	ocamlbuild ${OPT} coqdoc.native
+	ocamlbuild coqdoc.native
 
 debug:
-	ocamlbuild ${OPT} coqdoc.byte
+	ocamlbuild coqdoc.byte
 
 clean:
 	ocamlbuild -clean

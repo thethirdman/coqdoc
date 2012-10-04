@@ -1,11 +1,33 @@
 ===============================================================================
+ Reunion du 3 Octobre
+===============================================================================
+
+  Après la phase de conception du CST, on désire concevoir la suite. Cette
+  première réunion s'est concentrée sur la phase entre le CST et le Vdoc, et
+  définit les bases de ce que contiendra le .vdoc:
+    - Après le CST, on désire générer un AST qui représente un document
+      à trous, et qui est composé de requêtes structurant ces trous
+      (let, print, seq, ...). L'objectif à partir de cet AST est de générer
+      un .vdoc contenant des informations de structure pour le document de
+      sortie (Refman, manpage, documentation de code, ...). Celui-ci doit être
+      générique sur l'aspect format de sortie (pdf, html, ...).
+    type t =
+      DocChunk : (t* -> t) -> t
+      | let : name -> request -> t -> t
+      | print : (context -> name -> t) -> name -> t
+      | Seq ...
+
+      context =  name * t
+  L'objectif de la semaine est de poser une première version de cette
+  structure, et de commencer à esquisser la chaine de compilation suivante:
+    CST -> AST -> Vdoc -> .output
+
+===============================================================================
  Reunion du 26 septembre
 ===============================================================================
 
 Parser/Lexer:
   - On veut réimplémenter un parser/lexer créant un CST qui sera évalué.
-
-
 
 ===============================================================================
  Reunion du 19 Septembre

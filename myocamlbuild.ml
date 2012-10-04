@@ -11,5 +11,6 @@ let _ = dispatch begin function
     flag ["compile";"use_clib"] (S[A"-I" ; P(coqsrc/"lib")]);
     ocaml_lib ~extern:true ~dir:(coqsrc/"lib") "lib";
     flag ["compile";"use_lib"] (S[A"-I" ; P(coqsrc/"lib")]);
+    Options.ocamlc:=S [!Options.ocamlc; A "-rectypes"]
   | _ -> ()
 end

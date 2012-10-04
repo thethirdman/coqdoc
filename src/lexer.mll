@@ -90,10 +90,10 @@ and lex_doc = parse
   | sp* ("*"+ as lvl) ' ' ([^'\n']* as title)
     {Queue.push (get_flush ()) tokens;
       Queue.push (SECTION ((String.length lvl), title)) tokens; Queue.pop tokens}
-  | (sp* as lvl) '-' ([^'\n']+ as elt) nl_end
+  (*| (sp* as lvl) '-'*
     {Queue.push (get_flush ()) tokens;
-      Queue.push (LST ((String.length lvl), elt)) tokens; lex_doc lexbuf;
-      Queue.push ENDLST; Queue.pop tokens}
+      Queue.push (LST (String.length lvl)) tokens; lex_doc lexbuf; (* FIXME*)
+      Queue.push ENDLST tokens; Queue.pop tokens}*)
   | eof { (if (Buffer.length buff <> 0) then
             Queue.push (get_flush ()) tokens); treat_eof ()}
   | "(*" | "(**" | "*)" as elt {Buffer.add_string buff elt; lex_doc lexbuf}

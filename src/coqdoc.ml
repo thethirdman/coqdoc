@@ -1,10 +1,12 @@
 (* Main definition file for coqdoc *)
 
 open Coqtop
+open Vernac_lexer
 open Lexer
 open Lexing
 open Parser
-  open Ident
+open Ident
+open MenhirLib
 
   (* Coqdoc's command line parser *)
   let usage = "This is coqdoc ...\nUsage: "
@@ -34,10 +36,13 @@ open Parser
           (*let ct = Coqtop.spawn [] in*)
           let src_file = open_in !file (*and dst_file = open_out !output*) in
           let lst = ref [] in
-          let lexbuf = from_channel src_file in
+          (*let lexbuf = from_channel src_file in*)
+          Printexc.record_backtrace true;
           try
             while true do
-              let ret = Parser.main document lexbuf in
+              let revised_parser =
+              (MenhirLib.Convert.Simplified.traditional2revised Parser.main) in
+              let ret = revised_parser (Vernac_lexer.lex src_file) in
               lst := ret::!lst
             done
           with Vdoc.End_of_file -> ();

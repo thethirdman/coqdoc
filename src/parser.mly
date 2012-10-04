@@ -1,5 +1,3 @@
-
-
 %token EOF STARTCOM ENDCOM STARTDOC STARTVERNAC ENDVERNAC
 %token STARTPP ENDPP STARTVERBATIM ENDVERBATIM HRULE
 %token EMPHASIS LATEX LATEX_MATH HTML ENDLST
@@ -11,25 +9,31 @@
 %type <Vdoc.source> main
 %type <Vdoc.doc> parse_doc
 
+%{
+  let merge_contents lst = List.fold_right (fun a b -> a^b) lst ""
+%}
+
 %%
 
+
 main:
-STARTCOM CONTENT ENDCOM
-  {Vdoc.Comment $2}
-| STARTDOC CONTENT ENDCOM
-  {Vdoc.Doc $2}
+STARTCOM list(CONTENT) ENDCOM
+  {Vdoc.Comment (merge_contents $2)}
+| STARTDOC list(CONTENT) ENDCOM
+  {Vdoc.Doc (merge_contents $2)}
 | CONTENT
   { Vdoc.Code $1 }
 | EOF
   {raise Vdoc.End_of_file}
 
+
 parse_doc:
   lst = list(parse_term) EOF
     {Vdoc.List lst}
   | EMPHASIS lst=list (parse_term) EMPHASIS
-    {Vdoc.Emphasis lst}
+    {Vdoc.Emphasis (Vdoc.List lst)}
   | LST lst=list(parse_term) ENDLST
-    {Vdoc.Item $1,lst}
+    {Vdoc.Item ($1,(Vdoc.List lst))}
 
 parse_term:
 STARTVERNAC CONTENT ENDVERNAC

@@ -1,6 +1,5 @@
 <src> : include
-<src/coqdoc.{native,byte}>: package(str), package(unix), use_clib, rectypes, use_lib
+<src/coqdoc.{native,byte}>: package(str), package(unix), package(menhirLib), use_clib, rectypes, use_lib
 
-<src/*.ml{,i}>: package(str), package(unix), use_clib, rectypes, use_lib
-<src/*.mly>: menhir
-true: rectypes, annot, debug
+<src/*.ml{,i,y}>: package(str), package(unix), package(menhirLib), use_clib, rectypes, use_lib
+true: rectypes, annot, debug, use_menhir

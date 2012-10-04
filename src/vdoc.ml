@@ -33,7 +33,3 @@ type doc =
   | Verbatim of string
   | Content of string
   | List of doc list
-
-let rec insert elt = function
-  | List lst -> List (elt::lst)
-  | n        -> List (elt::n::[])
