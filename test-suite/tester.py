@@ -20,7 +20,7 @@ end ="\033[1;m"
 
 if ret_val != -1:
   print (fail + "[FAILED] " + coqdoc_output + end)
-  out_name, ext = os.path.splitext(os.path.basename(ref))
+  out_name, ext = os.path.splitext(os.path.basename(coqdoc_output))
   out_name = 'log/' + out_name + '.log'
   out_f = open(out_name, 'w')
   out_f.write(ret_output)

@@ -2,3 +2,4 @@
   <<
     let rec foo a b = a + b
     >>
+    *)

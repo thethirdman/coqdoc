@@ -44,8 +44,8 @@ STARTVERNAC CONTENT ENDVERNAC
   {Vdoc.Vernac $2}
 | STARTPP CONTENT ENDPP
   {Vdoc.Pretty_print $2}
-| STARTVERBATIM CONTENT ENDVERBATIM
-  {Vdoc.Verbatim $2}
+| STARTVERBATIM list(CONTENT) ENDVERBATIM
+  {Vdoc.Verbatim (merge_contents $2)}
 | SECTION
   {Vdoc.Section $1}
 | HRULE

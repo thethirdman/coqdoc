@@ -51,7 +51,7 @@ rule lex_doc = parse
     (tok_reg as tok) {Queue.push (get_flush ()) tokens;
                   Queue.push (Hashtbl.find tok_htbl tok) tokens;
                  Queue.pop tokens}
-  | sp* ("*"+ as lvl) ' ' ([^'\n']* as title)
+  | ("*"+ as lvl) ' ' ([^'\n']* as title)
     {Queue.push (get_flush ()) tokens;
       Queue.push (SECTION ((String.length lvl), title)) tokens; Queue.pop tokens}
   (*| (sp* as lvl) '-'*
