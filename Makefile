@@ -6,5 +6,8 @@ coqdoc:
 debug:
 	ocamlbuild coqdoc.byte
 
+test: coqdoc
+	make -C test-suite
+
 clean:
 	ocamlbuild -clean

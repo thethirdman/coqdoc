@@ -48,7 +48,7 @@
   let sp_nl = sp | nl (* Space or newline *)
 
 rule lex_doc = parse
-  sp_nl* (tok_reg as tok) sp_nl* {Queue.push (get_flush ()) tokens;
+    (tok_reg as tok) {Queue.push (get_flush ()) tokens;
                   Queue.push (Hashtbl.find tok_htbl tok) tokens;
                  Queue.pop tokens}
   | sp* ("*"+ as lvl) ' ' ([^'\n']* as title)

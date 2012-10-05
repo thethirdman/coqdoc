@@ -37,7 +37,6 @@ open MenhirLib
           let src_file = open_in !file (*and dst_file = open_out !output*) in
           let lst = ref [] in
           (*let lexbuf = from_channel src_file in*)
-          Printexc.record_backtrace true;
           try
             while true do
               let revised_parser =

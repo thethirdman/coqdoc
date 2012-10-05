@@ -28,8 +28,12 @@ STARTCOM list(CONTENT) ENDCOM
 
 
 parse_doc:
-  lst = list(parse_term) EOF
+  lst = list(parse_seq) EOF
     {Vdoc.List lst}
+
+parse_seq:
+  term = parse_term
+    {term}
   | EMPHASIS lst=list (parse_term) EMPHASIS
     {Vdoc.Emphasis (Vdoc.List lst)}
   | LST lst=list(parse_term) ENDLST

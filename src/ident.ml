@@ -9,7 +9,7 @@ module Ident = struct
     let rec aux = function
       | Vdoc.Vernac s -> printf "[%s]" s
       | Vdoc.Pretty_print s -> printf "[[%s]]" s
-      | Vdoc.Section (a,b) -> printf "%*s*%s" a "" b
+      | Vdoc.Section (a,b) -> printf "%*s* %s" (a-1) "" b
       | Vdoc.Item (a,b) -> printf "%*s-%s" a "" ""(*FIXME: replace with type doc *)
       | Vdoc.Emphasis s -> printf "_"; aux s; printf "_"
       | Vdoc.Raw s -> print_string ("raw")
@@ -22,7 +22,7 @@ module Ident = struct
   printf "*)"
 
 let print = function
-  | Vdoc.Comment s -> printf "(*i%si*)" s
+  | Vdoc.Comment s -> printf "(*%s*)" s
   | Vdoc.Doc s -> printf "ERROR FAIL OMG"
   | Vdoc.Code s -> printf "%s" s
 end
