@@ -3,6 +3,7 @@
 
 *.tmp
 *.log
+test-suite/*.txt
 
 # Ocaml compilation files
 
