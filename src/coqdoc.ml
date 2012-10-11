@@ -2,11 +2,11 @@
 
 open Coqtop
 open Vernac_lexer
-open Lexer
 open Lexing
 open Parser
-open Ident
+open Lexer
 open MenhirLib
+open Ident
 
   (* Coqdoc's command line parser *)
   let usage = "This is coqdoc ...\nUsage: "
@@ -44,9 +44,10 @@ open MenhirLib
               let ret = revised_parser (Vernac_lexer.lex src_file) in
               lst := ret::!lst
             done
-          with Vdoc.End_of_file -> ();
-          List.iter (function Vdoc.Doc s -> Ident.print_doc (treat_doc s)
-                              | s -> Ident.print s) (List.rev !lst)
+          with Cst.End_of_file -> ();
+          let cst = Cst.make_cst (List.rev !lst) treat_doc in
+          Ident.print cst
+
         end
           else
             print_string usage

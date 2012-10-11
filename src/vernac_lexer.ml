@@ -6,7 +6,7 @@ module Vernac_lexer = struct
   exception Lexer_Error of string
 
   let reg = Str.regexp "\\((\\*\\*\\)\\|\\((\\*\\)\\|\\(\\*)\\)"
-  let (tokens : Parser.token Queue.t)= Queue.create ()
+  let (tokens : 'a (*Parser.token*) Queue.t)= Queue.create ()
   let dummy_pos = {pos_fname = "dummy"; pos_lnum = 1; pos_bol = 42; pos_cnum =
     1}
 

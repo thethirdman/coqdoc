@@ -6,8 +6,8 @@
 %token <string> CONTENT
 
 %start main parse_doc /* FIXME: good return type */
-%type <Vdoc.source> main
-%type <Vdoc.doc> parse_doc
+%type <Cst.source> main
+%type <Cst.doc> parse_doc
 
 %{
   let merge_contents lst = List.fold_right (fun a b -> a^b) lst ""
@@ -18,45 +18,45 @@
 
 main:
 STARTCOM list(CONTENT) ENDCOM
-  {Vdoc.Comment (merge_contents $2)}
+  {Cst.Raw_Comment (merge_contents $2)}
 | STARTDOC list(CONTENT) ENDCOM
-  {Vdoc.Doc (merge_contents $2)}
+  {Cst.Raw_Doc (merge_contents $2)}
 | CONTENT
-  { Vdoc.Code $1 }
+  { Cst.Raw_Code $1 }
 | EOF
-  {raise Vdoc.End_of_file}
+  {raise Cst.End_of_file}
 
 
 parse_doc:
   lst = list(parse_seq) EOF
-    {Vdoc.List lst}
+    {Cst.List lst}
 
 parse_seq:
   term = parse_term
     {term}
   | EMPHASIS lst=list (parse_term) EMPHASIS
-    {Vdoc.Emphasis (Vdoc.List lst)}
+    {Cst.Emphasis (Cst.List lst)}
   | LST lst=list(parse_term) ENDLST
-    {Vdoc.Item ($1,(Vdoc.List lst))}
+    {Cst.Item ($1,(Cst.List lst))}
 
 parse_term:
 STARTVERNAC CONTENT ENDVERNAC
-  {Vdoc.Vernac $2}
+  {Cst.Vernac $2}
 | STARTPP CONTENT ENDPP
-  {Vdoc.Pretty_print $2}
+  {Cst.Pretty_print $2}
 | STARTVERBATIM list(CONTENT) ENDVERBATIM
-  {Vdoc.Verbatim (merge_contents $2)}
+  {Cst.Verbatim (merge_contents $2)}
 | SECTION
-  {Vdoc.Section $1}
+  {Cst.Section $1}
 | HRULE
-  {Vdoc.Hrule}
+  {Cst.Hrule}
 | LATEX CONTENT LATEX
-  {Vdoc.Raw {Vdoc.latex = $2; Vdoc.latex_math=""; Vdoc.html="";}}
+  {Cst.Raw {Cst.latex = $2; Cst.latex_math=""; Cst.html="";}}
 | LATEX_MATH CONTENT LATEX_MATH
-  {Vdoc.Raw {Vdoc.latex = ""; Vdoc.latex_math=$2; Vdoc.html="";}}
+  {Cst.Raw {Cst.latex = ""; Cst.latex_math=$2; Cst.html="";}}
 | HTML CONTENT HTML
-  {Vdoc.Raw {Vdoc.latex = ""; Vdoc.latex_math=""; Vdoc.html=$2;}}
+  {Cst.Raw {Cst.latex = ""; Cst.latex_math=""; Cst.html=$2;}}
 | CONTENT
-  {Vdoc.Content $1}
+  {Cst.Content $1}
 (*| EOF
   {Vdoc.List []}*)
