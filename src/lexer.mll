@@ -46,14 +46,18 @@
 
   let nl_end = nl | "*)"
   let sp_nl = sp | nl (* Space or newline *)
+  let name = ['a'-'z''A'-'Z''0'-'9']+
 
 rule lex_doc = parse
     (tok_reg as tok) {Queue.push (get_flush ()) tokens;
                   Queue.push (Hashtbl.find tok_htbl tok) tokens;
                  Queue.pop tokens}
-  | "let " (['a'-'z''A'-'Z''0'-'9']+ as name) "=" (['0'-'9']+ as elt)
+  | "@let " (name as name) "=" (['0'-'9']+ as elt)
   {Queue.push (get_flush ()) tokens;
       Queue.push (LET (name, elt)) tokens; Queue.pop tokens}
+  | "@print{" (name as name) "}"
+  {Queue.push (get_flush ()) tokens;
+      Queue.push (PRINT name) tokens; Queue.pop tokens}
   | ("*"+ as lvl) ' ' ([^'\n']* as title)
     {Queue.push (get_flush ()) tokens;
       Queue.push (SECTION ((String.length lvl), title)) tokens; Queue.pop tokens}

@@ -24,7 +24,8 @@ type 'a ast =
   (* Should be name -> request 'a -> 'a *)
   | Let of (name -> 'a)
   (* Prints bounded code *)
-  | Print of ((context -> name -> 'a) -> name -> 'a)
+  (* ((context -> name -> 'a) -> name -> 'a)*)
+  | Print of (('a -> unit) -> unit)
   | Seq of ('a ast) list
 
 let rec ast_of_cst cst =
@@ -34,6 +35,7 @@ let rec ast_of_cst cst =
       !name_index)
     | Cst.List lst ->
       Seq (List.fold_right (fun elt acc -> (aux elt)::acc) lst [])
+    | Cst.Print name -> Print (fun f -> f (List.assoc name !name_index))
     | s -> Doc_chunk (fun f -> f (Cst.Doc s)) in
   match cst with
   | Cst.Doc s -> aux s
@@ -47,4 +49,5 @@ let rec pp_ast = function
   Doc_chunk f -> Ident.print (f (fun id -> id))
   | Let f -> Ident.print (f "plop")
   | Seq lst -> List.iter pp_ast lst
+  | Print f -> f Ident.print
   | _ -> Printf.printf "smth else\n"

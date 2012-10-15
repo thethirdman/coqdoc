@@ -26,8 +26,10 @@ type doc =
   | Raw of raw_content
   | Verbatim of string
   | Content of string
-  | Let of (string * string)
   | List of doc list
+  (* Coqdoc's keywords *)
+  | Let of (string * string)
+  | Print of string
 
 
 (* Final CST *)

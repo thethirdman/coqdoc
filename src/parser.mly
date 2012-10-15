@@ -3,7 +3,7 @@
 %token EMPHASIS LATEX LATEX_MATH HTML ENDLST
 %token <int> LST
 %token <int*string> SECTION
-%token <string> CONTENT
+%token <string> CONTENT PRINT
 %token <string*string> LET
 
 %start main parse_doc /* FIXME: good return type */
@@ -61,5 +61,7 @@ STARTVERNAC CONTENT ENDVERNAC
   {Cst.Content $1}
 | name = LET
   {Cst.Let name}
+| name = PRINT
+  {Cst.Print name}
 (*| EOF
   {Vdoc.List []}*)
