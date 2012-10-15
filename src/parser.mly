@@ -4,6 +4,7 @@
 %token <int> LST
 %token <int*string> SECTION
 %token <string> CONTENT
+%token <string*string> LET
 
 %start main parse_doc /* FIXME: good return type */
 %type <Cst.source> main
@@ -58,5 +59,7 @@ STARTVERNAC CONTENT ENDVERNAC
   {Cst.Raw {Cst.latex = ""; Cst.latex_math=""; Cst.html=$2;}}
 | CONTENT
   {Cst.Content $1}
+| name = LET
+  {Cst.Let name}
 (*| EOF
   {Vdoc.List []}*)
