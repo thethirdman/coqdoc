@@ -1,4 +1,43 @@
 ===============================================================================
+  Réunion du 15 octobre
+===============================================================================
+
+  François a bloqué su le rôle de l'AST dans notre chaîne. Plus
+  précisément, il l'a trouvé trop abstrait : n'est-il pas étrange de
+  passer d'un 
+
+  - CST (censé représenter la structure du document) 
+
+  - à un AST ne contenant plus qu'une distinction entre documents et
+  requêtes, ne faisant plus apparaître de détails liés au document
+
+  pour repasser ensuite à un CST servant à produire le document final? 
+
+  Effectivement, il serait étrange de perdre la structure du document
+  initial pendant la phase de résolution des requêtes. La phase
+  d'abstraction ne doit donc pas être implémentée à l'aide d'un nouveau type
+  "ast" mais par sous-typage. 
+
+  On suppose que le type des documents contient des noeuds "query" que la 
+  phase de résolution des requêtes va éliminer. 
+
+  Les phases de coqdoc sont alors :
+
+  1. Analyse syntaxique
+     Entrée : les fichiers sources
+     Sortie : arbre de syntaxe pour le document, contenant des noeuds "query".
+
+  2. Résolution des requêtes
+     Entrée : arbre de syntaxe du document produit par les phases précédentes.
+     Sortie : arbre de syntaxe où les requêtes ont été résolues.
+
+  3. Production du document
+     Entrées : arbre de syntaxe du document et ensemble d'afficheurs
+     Sortie : le document dans son format final.
+
+  À faire : un prototype qui suit cette structure. 
+
+===============================================================================
  Reunion du 3 Octobre
 ===============================================================================
 
