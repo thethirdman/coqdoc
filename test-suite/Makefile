@@ -1,5 +1,5 @@
 TESTFILES=sections lists pretty_printing hrule emphasis verbatim html \
-					hide show latex nested_com nested_emph
+					hide show latex nested_com nested_emph query
 DIFFTOOL=diff
 COQDOC=../coqdoc.native
 TESTER=tester.py

@@ -23,7 +23,11 @@ module Ident = struct
     | Cst.Content s -> printf "%s" s
     | Cst.List lst -> List.iter aux lst
     | Cst.Hrule -> printf("----")
-    | Cst.Let (name,value) -> printf "Let %s: %s" name value
+    | Cst.Query (name, arg_list) ->
+        printf "@%s{" name;
+        printf "%s" (List.hd arg_list);
+        List.iter (fun e -> printf ",%s" e) (List.tl arg_list);
+        printf "}"
     | _ -> printf "foo\n" in
   printf "(**";
   aux doc;

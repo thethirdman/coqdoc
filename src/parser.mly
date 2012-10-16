@@ -3,14 +3,15 @@
 %token EMPHASIS LATEX LATEX_MATH HTML ENDLST
 %token <int> LST
 %token <int*string> SECTION
-%token <string> CONTENT PRINT
-%token <string*string> LET
+%token <string> CONTENT
+%token <string*string> QUERY
 
 %start main parse_doc /* FIXME: good return type */
 %type <Cst.source> main
 %type <Cst.doc> parse_doc
 
 %{
+  open Str
   let merge_contents lst = List.fold_right (fun a b -> a^b) lst ""
 %}
 
@@ -59,9 +60,8 @@ STARTVERNAC CONTENT ENDVERNAC
   {Cst.Raw {Cst.latex = ""; Cst.latex_math=""; Cst.html=$2;}}
 | CONTENT
   {Cst.Content $1}
-| name = LET
-  {Cst.Let name}
-| name = PRINT
-  {Cst.Print name}
+| query = QUERY
+  {let (name,arglist) = query in Cst.Query (name,(Str.split (Str.regexp ",")
+  arglist))}
 (*| EOF
   {Vdoc.List []}*)

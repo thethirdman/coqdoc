@@ -19,7 +19,7 @@
 
   let get_flush () =
     let str = Buffer.contents buff in
-    Buffer.clear buff; (CONTENT str)
+    Buffer.clear buff; Queue.push (CONTENT str) tokens
 
   let tok_lst =
     [("[",STARTVERNAC);
@@ -50,20 +50,16 @@
   let name = ['a'-'z''A'-'Z''0'-'9']+
 
 rule lex_doc = parse
-    (tok_reg as tok) {Queue.push (get_flush ()) tokens;
+    (tok_reg as tok) {get_flush ();
                   Queue.push (Hashtbl.find tok_htbl tok) tokens;
                  Queue.pop tokens}
-  | "@let " (name as name) "=" (['0'-'9']+ as elt)
-  {Queue.push (get_flush ()) tokens;
-      Queue.push (LET (name, elt)) tokens; Queue.pop tokens}
-  | "@print{" (name as name) "}"
-  {Queue.push (get_flush ()) tokens;
-      Queue.push (PRINT name) tokens; Queue.pop tokens}
+  | '@' (name as query) '{' ((name ',')* as arglist) '}'
+    {get_flush (); Queue.push (QUERY (query,arglist)) tokens; Queue.pop tokens}
   | ("*"+ as lvl) ' ' ([^'\n']* as title)
-    {Queue.push (get_flush ()) tokens;
+    {get_flush ();
       Queue.push (SECTION ((String.length lvl), title)) tokens; Queue.pop tokens}
   | (sp* as lvl) "- "
-    {Queue.push (get_flush ()) tokens; lst_lvl := (String.length lvl);
+    {get_flush (); lst_lvl := (String.length lvl);
       Queue.push (LST !lst_lvl) tokens; Queue.pop tokens}
   | (sp* as lvl) {let cur_lvl = String.length lvl in
     if cur_lvl = !lst_lvl then
@@ -80,6 +76,6 @@ rule lex_doc = parse
         Buffer.add_string buff lvl; lex_doc lexbuf
       end}
   | eof { (if (Buffer.length buff <> 0) then
-            Queue.push (get_flush ()) tokens); treat_eof ()}
+            get_flush ()) ; treat_eof ()}
   | "(*" | "(**" | "*)" as elt {Buffer.add_string buff elt; lex_doc lexbuf}
   | _ as c {Buffer.add_char buff c; lex_doc lexbuf}

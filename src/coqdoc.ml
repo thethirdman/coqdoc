@@ -7,7 +7,6 @@ open Parser
 open Lexer
 open MenhirLib
 open Ident
-open Ast
 
   (* Coqdoc's command line parser *)
   (* FIXME: make a real usage doc_string *)

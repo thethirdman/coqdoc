@@ -27,9 +27,8 @@ type doc =
   | Verbatim of string
   | Content of string
   | List of doc list
-  (* Coqdoc's keywords *)
-  | Let of (string * string)
-  | Print of string
+  (* Type for documentation queries: @name{arg_list} *)
+  | Query of (string*string list)
 
 
 (* Final CST *)
