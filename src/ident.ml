@@ -1,4 +1,6 @@
 (* Identity output module for test purposes *)
+(* The call to print will reproduce the input file
+ * on stdout*)
 
 open Printf
 open Cst

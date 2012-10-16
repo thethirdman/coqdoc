@@ -39,14 +39,16 @@ type cst =
   | Code of string
   | Seq of cst list
 
+
+(* Inserts an element into a cst.Seq type. Creates a Seq if necessary*)
 let insert_seq elt = function
   (Seq lst) -> (Seq (elt::lst))
   | s -> (Seq (elt::s::[]))
 
+(* Converts source and doc types into the common type cst *)
 let make_cst lst doc_converter =
   let rec aux elt acc = match elt with
         Raw_Doc s -> insert_seq (Doc (doc_converter s)) acc
         | Raw_Comment s -> insert_seq (Comment s) acc
         | Raw_Code s -> insert_seq (Code s) acc
   in List.fold_right aux lst (Seq [])
-

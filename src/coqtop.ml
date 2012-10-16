@@ -4,6 +4,7 @@ module Coqtop = struct
 
 exception Coqtop_crash
 
+(* Coqtop handle for communication with the toplevel *)
 type coqtop = {
   pid : int;
   cout : in_channel;
@@ -11,6 +12,8 @@ type coqtop = {
   xml_parser : Xml_parser.t;
 }
 
+(* Logger for interactions with coqtop (required for somes functions
+ * of [Interface]*)
 let default_logger lvl msg = match lvl with
   | Debug s -> print_string ("Debug: " ^ msg ^ "\n")
   | Info    -> print_string ("Info: " ^ msg ^ "\n")
@@ -31,7 +34,9 @@ let open_process_pid prog args =
   set_binary_mode_in ic true;
   (pid,ic,oc)
 
-  (*FIXME: have real coqtop path *)
+
+(* Spawn a coqtop process for interaction. Returns a handler *)
+(*FIXME: have real coqtop path *)
 let spawn args =
   let prog = "coqtop" in
   let args = Array.of_list (prog :: "-ideslave" :: args) in
@@ -45,6 +50,8 @@ let spawn args =
     xml_parser = p;
   }
 
+(* Generic function for coqtop interaction. This should not be used
+ * directly *)
 let eval_call coqtop logger (c:'a Serialize.call) =
   (** Retrieve the messages sent by coqtop until an answer has been received *)
   let rec loop () =

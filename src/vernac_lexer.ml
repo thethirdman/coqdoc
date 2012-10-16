@@ -1,3 +1,5 @@
+(* Custom lexer for the first expression splitting phase.
+ * This lexer splits the entry into a Cst.source list. *)
 open Lexing
 open Parser
 
@@ -10,10 +12,6 @@ module Vernac_lexer = struct
   let dummy_pos = {pos_fname = "dummy"; pos_lnum = 1; pos_bol = 42; pos_cnum =
     1}
 
-  (*
-   sub_traversal : int -> string -> string -> Str.split_result list ->
-     string * Str.split_result list
-   *)
   let rec gen_tokens tokens depth = function
     [] -> Queue.push (CONTENT "") tokens; depth
     |(Str.Delim e)::l when e = "(*" -> begin

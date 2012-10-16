@@ -10,10 +10,12 @@ open Ident
 open Ast
 
   (* Coqdoc's command line parser *)
+  (* FIXME: make a real usage doc_string *)
   let usage = "This is coqdoc ...\nUsage: "
           ^ Sys.argv.(0) ^ " [options] [files]\n"
   let file = ref "" and output = ref ""
 
+  (* Option list for coqdoc *)
   let speclist = [
     ("-o", Arg.String (fun s -> output := s), "Specify output file")]
 
@@ -23,6 +25,7 @@ open Ast
       | x -> raise (Arg.Bad ("Invalid argument: " ^ x))
 
 
+  (* Takes a coqdoc documentation string, returns a Cst.doc tree *)
   let treat_doc str =
     let lexbuf = from_string str in
     (Parser.parse_doc lex_doc lexbuf)
