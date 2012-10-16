@@ -47,7 +47,8 @@ open Ast
             done
           with Cst.End_of_file -> ();
           let cst = Cst.make_cst (List.rev !lst) treat_doc in
-          let ast = ast_of_cst cst in pp_ast ast
+          Ident.print cst
+          (*let ast = ast_of_cst cst in pp_ast ast*)
         end
           else
             print_string usage

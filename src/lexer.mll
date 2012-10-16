@@ -6,6 +6,7 @@
 
   let buff = Buffer.create 42
   let tokens = Queue.create ()
+  let lst_lvl = ref (-1)
 
   let backtrack lexbuf = lexbuf.lex_curr_pos <- lexbuf.lex_start_pos;
     lexbuf.lex_curr_p <- lexbuf.lex_start_p
@@ -61,10 +62,23 @@ rule lex_doc = parse
   | ("*"+ as lvl) ' ' ([^'\n']* as title)
     {Queue.push (get_flush ()) tokens;
       Queue.push (SECTION ((String.length lvl), title)) tokens; Queue.pop tokens}
-  (*| (sp* as lvl) '-'*
-    {Queue.push (get_flush ()) tokens;
-      Queue.push (LST (String.length lvl)) tokens; lex_doc lexbuf; (* FIXME*)
-      Queue.push ENDLST tokens; Queue.pop tokens}*)
+  | (sp* as lvl) "- "
+    {Queue.push (get_flush ()) tokens; lst_lvl := (String.length lvl);
+      Queue.push (LST !lst_lvl) tokens; Queue.pop tokens}
+  | (sp* as lvl) {let cur_lvl = String.length lvl in
+    if cur_lvl = !lst_lvl then
+      begin
+        Buffer.add_string buff lvl; lex_doc lexbuf
+      end
+    else if !lst_lvl <> (-1) then
+      begin
+        Queue.push ENDLST tokens; Buffer.add_string buff lvl; lst_lvl := -1;
+        lex_doc lexbuf
+      end
+    else
+      begin
+        Buffer.add_string buff lvl; lex_doc lexbuf
+      end}
   | eof { (if (Buffer.length buff <> 0) then
             Queue.push (get_flush ()) tokens); treat_eof ()}
   | "(*" | "(**" | "*)" as elt {Buffer.add_string buff elt; lex_doc lexbuf}

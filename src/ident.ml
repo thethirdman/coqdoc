@@ -14,7 +14,7 @@ module Ident = struct
       | Cst.Vernac s -> printf "[%s]" s
       | Cst.Pretty_print s -> printf "[[%s]]" s
       | Cst.Section (a,b) -> printf "%s %s" (String.make a '*') b
-      | Cst.Item (a,b) -> printf "%*s-%s" a "" ""(*FIXME: replace with type doc *)
+      | Cst.Item (a,b) -> printf "%*s- %s" a "" ""(*FIXME: replace with type doc *)
       | Cst.Emphasis s -> printf "_"; aux s; printf "_"
       | Cst.Raw s -> print_raw s
       | Cst.Verbatim s -> printf "<<%s>>" s
