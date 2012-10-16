@@ -7,6 +7,7 @@ open Parser
 open Lexer
 open MenhirLib
 open Ident
+open Ast
 
   (* Coqdoc's command line parser *)
   (* FIXME: make a real usage doc_string *)
@@ -29,6 +30,11 @@ open Ident
     let lexbuf = from_string str in
     (Parser.parse_doc lex_doc lexbuf)
 
+  let rec traverse f = function
+  Doc d -> f d
+  | Seq s -> List.iter (fun e -> traverse f  e) s
+  | Query  _ -> failwith "FAIL"
+
   let _ =
     Arg.parse speclist parse_anon usage;
       if !file <> "" then
@@ -49,8 +55,7 @@ open Ident
             done
           with Cst.End_of_file -> ();
           let cst = Cst.make_cst (List.rev !lst) treat_doc in
-          Ident.print cst
-          (*let ast = ast_of_cst cst in pp_ast ast*)
+          let ast = Ast.translate cst in (traverse Ident.print_doc (eval ast))
         end
           else
             print_string usage

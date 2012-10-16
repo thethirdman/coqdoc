@@ -53,7 +53,7 @@ rule lex_doc = parse
     (tok_reg as tok) {get_flush ();
                   Queue.push (Hashtbl.find tok_htbl tok) tokens;
                  Queue.pop tokens}
-  | '@' (name as query) '{' ((name ',')* as arglist) '}'
+  | '@' (name as query) '{' (_* as arglist) '}'
     {get_flush (); Queue.push (QUERY (query,arglist)) tokens; Queue.pop tokens}
   | ("*"+ as lvl) ' ' ([^'\n']* as title)
     {get_flush ();
