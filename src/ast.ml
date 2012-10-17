@@ -26,19 +26,21 @@ type 'a ast = ('a ast_node) list
 (* Dummy function for test purposes *)
 let _ =
   Hashtbl.add symbol_table "id"
-    (fun context arglist -> Cst.List (List.map (fun elt -> Cst.Content elt) arglist))
+    (fun context arglist -> `List (List.map (fun elt -> `Content elt) arglist))
 
 
 (** Cst.doc -> ast *)
 let rec extract_queries = function
-  Cst.Query (name, arglist) -> Query (name, arglist)
+  `Query (name, arglist) -> Query (name, arglist)
   | d -> Doc d
 
 (** Cst.cst -> ast *)
 let rec translate cst =
   let rec aux elt acc = match elt with
     Cst.Doc d  -> (extract_queries d)::acc
-    | Cst.Code e | Cst.Comment e -> (Doc (Cst.Content e))::acc (* FIXME: real type *) in
+    (*FIXME: ugliness *)
+    | Cst.Code c -> (Doc (`Content c))::acc
+    | _ -> acc (* FIXME: real type *) in
   List.fold_right aux cst []
 
 (* Evaluates the queries of an ast *)

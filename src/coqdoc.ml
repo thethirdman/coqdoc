@@ -38,7 +38,7 @@ open Ast
               output := "out.txt";
           (*FIXME: add arg mngmnt for coqtop *)
           (*let ct = Coqtop.spawn [] in*)
-          let src_file = open_in !file (*and dst_file = open_out !output*) in
+          let src_file = open_in !file and dst_file = open_out !output in
           let lst = ref [] in
           (*let lexbuf = from_channel src_file in*)
           try
@@ -50,7 +50,7 @@ open Ast
             done
           with Cst.End_of_file -> ();
           let cst = Cst.make_cst (List.rev !lst) treat_doc in
-          let ast = Ast.translate cst in Ident.print cst
+          let ast = Ast.translate cst in Vdoc.to_output dst_file Vdoc.default_html (Ast.eval ast)
         end
           else
             print_string usage
