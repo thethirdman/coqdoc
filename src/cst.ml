@@ -4,12 +4,6 @@
 
 exception End_of_file
 
-(* First data-type, splits documentation and code *)
-type source =
-  | Raw_Comment of string
-  | Raw_Doc of string
-  | Raw_Code of string
-
 (* Type representing inline tex/html in source files *)
 type raw_content = { latex : string; latex_math : string; html : string}
 
@@ -32,22 +26,19 @@ type doc =
 
 
 (* Final CST *)
-type cst =
+type 'a cst_node =
   | Comment of string
-  | Doc of doc
+  | Doc of 'a
   | Code of string
-  | Seq of cst list
 
+type 'a cst = ('a cst_node) list
 
 (* Inserts an element into a cst.Seq type. Creates a Seq if necessary*)
-let insert_seq elt = function
-  (Seq lst) -> (Seq (elt::lst))
-  | s -> (Seq (elt::s::[]))
 
 (* Converts source and doc types into the common type cst *)
-let make_cst lst doc_converter =
-  let rec aux elt acc = match elt with
-        Raw_Doc s -> insert_seq (Doc (doc_converter s)) acc
-        | Raw_Comment s -> insert_seq (Comment s) acc
-        | Raw_Code s -> insert_seq (Code s) acc
-  in List.fold_right aux lst (Seq [])
+let make_cst lst (doc_converter:string -> doc) =
+  let aux node = match node with
+    | Doc s -> Doc (doc_converter s)
+    | Code n -> Code n
+    | Comment n -> Comment n in
+  List.map aux lst

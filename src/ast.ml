@@ -1,9 +1,9 @@
-open Cst
-open Ident
 (* This module contains the AST representation
  * the evaluation of this ast creates an abstract representation of
  * what will be put in the .vdoc
  *)
+
+open Cst
 
 (** stores the defined symbols in coqdoc: primitives and user-defined functions
  (symbol * (name -> context -> arglist -> doc) list
@@ -12,15 +12,16 @@ let symbol_table = Hashtbl.create 42
 
 type symbol = string
 type arglist = string list
+type query = (string * string list)
 
 (*FIXME: set up real type *)
 type context = unit
 
-type ast_node =
+type 'a ast_node =
   Doc of Cst.doc
-  | Query of (symbol * arglist)
-  | Seq of ast_node list (*FIXME: move to a canonical representation*)
+  | Query of 'a
 
+type 'a ast = ('a ast_node) list
 
 (* Dummy function for test purposes *)
 let _ =
@@ -28,19 +29,21 @@ let _ =
     (fun context arglist -> Cst.List (List.map (fun elt -> Cst.Content elt) arglist))
 
 
+(** Cst.doc -> ast *)
 let rec extract_queries = function
   Cst.Query (name, arglist) -> Query (name, arglist)
-  | Cst.List lst -> Seq (List.fold_right (fun elt acc -> (extract_queries
-  elt)::acc) lst [])
   | d -> Doc d
 
-let rec translate = function
-    Cst.Doc d  -> extract_queries d
-  | Cst.Seq s  -> Seq (List.fold_right (fun elt acc -> (translate elt)::acc) s [])
-  | _ -> Seq [] (* FIXME: real type *)
+(** Cst.cst -> ast *)
+let rec translate cst =
+  let rec aux elt acc = match elt with
+    Cst.Doc d  -> (extract_queries d)::acc
+    | Cst.Code e | Cst.Comment e -> (Doc (Cst.Content e))::acc (* FIXME: real type *) in
+  List.fold_right aux cst []
 
 (* Evaluates the queries of an ast *)
-let rec eval = function
+let rec eval ast =
+  let rec aux = function
   Doc d -> Doc d
   | Query (name, arglist) -> Doc ((Hashtbl.find symbol_table name) () arglist)
-  | Seq s -> Seq (List.fold_right (fun elt acc -> (eval elt)::acc) s [])
+  in List.map aux ast

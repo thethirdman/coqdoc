@@ -33,10 +33,11 @@ module Ident = struct
   aux doc;
   printf "*)"
 
-let rec print = function
-  | Cst.Comment s -> printf "(*%s*)" s
-  | Cst.Doc e -> print_doc e
-  | Cst.Code s -> printf "%s" s
-  | Cst.Seq  s -> List.iter print s
+let print lst =
+  let aux = function
+    | Cst.Comment s -> printf "(*%s*)" s
+    | Cst.Doc e -> print_doc e
+    | Cst.Code s -> printf "%s" s in
+  List.iter aux lst
 
 end

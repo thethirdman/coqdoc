@@ -7,7 +7,7 @@
 %token <string*string> QUERY
 
 %start main parse_doc /* FIXME: good return type */
-%type <Cst.source> main
+%type <string Cst.cst_node> main
 %type <Cst.doc> parse_doc
 
 %{
@@ -20,11 +20,11 @@
 
 main:
 STARTCOM list(CONTENT) ENDCOM
-  {Cst.Raw_Comment (merge_contents $2)}
+  {Cst.Comment (merge_contents $2)}
 | STARTDOC list(CONTENT) ENDCOM
-  {Cst.Raw_Doc (merge_contents $2)}
+  {Cst.Doc (merge_contents $2)}
 | CONTENT
-  { Cst.Raw_Code $1 }
+  {Cst.Code $1 }
 | EOF
   {raise Cst.End_of_file}
 
