@@ -3,7 +3,6 @@
  * on stdout*)
 
 open Printf
-open Cst
 
 module Ident = struct
   let print_raw raw =

@@ -1,13 +1,8 @@
 (* Main definition file for coqdoc *)
 
-open Coqtop
 open Vernac_lexer
 open Lexing
-open Parser
 open Lexer
-open MenhirLib
-open Ident
-open Ast
 open Settings
 
   (* Takes a coqdoc documentation string, returns a Cst.doc tree *)

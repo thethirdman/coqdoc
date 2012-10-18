@@ -3,8 +3,6 @@
  * what will be put in the .vdoc
  *)
 
-open Cst
-
 (** stores the defined symbols in coqdoc: primitives and user-defined functions
  (symbol * (name -> context -> arglist -> doc) list
  *)

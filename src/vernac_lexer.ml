@@ -1,5 +1,6 @@
 (* Custom lexer for the first expression splitting phase.
  * This lexer splits the entry into a Cst.source list. *)
+
 open Lexing
 open Parser
 
