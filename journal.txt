@@ -2,6 +2,22 @@
 | Development journal for coqdoc project |
 ------------------------------------------
 
+17/10/12
+  - On utilise des variants polymorphes pour le type Cst.doc:
+      c'est cool, on est extensible en entrée et en sortie au niveau
+      des types (on pourrait imaginer permettre à l'utilisateur d'étendre
+      la grammaire d'entrée). Quid de la sécurité ???
+  - Pour l'instant, le type ast est moche. C'est un variant bête : soit
+    de la doc, soit une requête. Après évaluation, tout les éléments de
+    l'ast doivent être de type doc. On voudrait plus de contraintes sur
+    le type.
+  - la fonction to_output s'occupe de la sortie. Elle prend une fonction
+    définie par l'utilisateur, qui sera appliquée sur l'AST. A l'heure
+    actuelle, celle ci renvoie du type string option. Si son retour est
+    None, on applique la fonction par défaut.
+    Cela manque clairement de sureté au niveau des types. Peut-être existe
+    t'il une meilleure solution ???
+
 25/09/12
   - Patch les coordonnées de l'AST
   - Le lexer de coqdoc-old est intégré. Il faut finaliser la conversion
