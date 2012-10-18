@@ -1,5 +1,7 @@
 (* This is the option which handles the command line interaction *)
 
+open Str
+
 type backend_type =
   Html
   | Latex
@@ -11,6 +13,10 @@ type file_io = {
   o_chan : out_channel  ref;
   i_chan : in_channel   ref;
   o_type : backend_type ref}
+
+(** If the output file is unspecified the default output will stdout.
+ *  If no extension is specified on the output file, coqdoc will chose the
+ *  one adapted to the output type*)
 
 let io = { o_file = ref ""; i_file = ref ""; o_chan = ref stdout;
                 i_chan = ref stdin; o_type = ref Html}
@@ -35,6 +41,19 @@ let parse_anon = function
     s when Sys.file_exists s -> io.i_file := s;
     | x -> raise (Arg.Bad ("Invalid argument: " ^ x))
 
+let get_ext str =
+    let reg = Str.regexp "\\." in
+  try
+    let off = Str.search_backward reg str (String.length str) in
+    Some (Str.string_after str off)
+  with Not_found -> None
+
+let gen_ext prefix = function
+  Html ->          (prefix ^ ".html")
+  | Latex ->       (prefix ^ ".tex")
+  | PrettyPrint -> (prefix ^ ".pp")
+
+(* Parses the command line and sets up the variables *)
 let parse () =
   Arg.parse speclist parse_anon usage;
   if (!print_help) then
@@ -42,4 +61,6 @@ let parse () =
   else
     io.i_chan := open_in !(io.i_file);
     if !(io.o_file) <> "" then
+      if get_ext !(io.o_file) = None then begin
+        io.o_file := gen_ext !(io.o_file) !(io.o_type) end;
       io.o_chan := open_out !(io.o_file)
