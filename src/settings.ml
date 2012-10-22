@@ -60,7 +60,8 @@ let parse () =
     (print_string (Arg.usage_string speclist usage); exit 0)
   else
     io.i_chan := open_in !(io.i_file);
-    if !(io.o_file) <> "" then
+    if !(io.o_file) <> "" then begin
       if get_ext !(io.o_file) = None then begin
         io.o_file := gen_ext !(io.o_file) !(io.o_type) end;
       io.o_chan := open_out !(io.o_file)
+    end

@@ -4,7 +4,9 @@ open Vernac_lexer
 open Lexing
 open Lexer
 open Settings
+open Vdoc
 
+  module Lord = Backend(Html)
   (* Takes a coqdoc documentation string, returns a Cst.doc tree *)
   let treat_doc str =
     let lexbuf = from_string str in
@@ -24,4 +26,5 @@ open Settings
       done
     with Cst.End_of_file -> ();
     let cst = Cst.make_cst (List.rev !lst) treat_doc in
-    let ast = Ast.translate cst in Vdoc.to_output !(io.o_chan) Vdoc.default_html (Ast.eval ast)
+    let ast = Ast.translate cst in Lord.transform !(io.o_chan)
+        (fun s -> "error") (Ast.eval ast)
