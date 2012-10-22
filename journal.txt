@@ -2,6 +2,29 @@
 | Development journal for coqdoc project |
 ------------------------------------------
 
+22/10/12
+  Ce qu'il reste à faire:
+    - Avoir un front-end generique: pour l'instant, celui ci est directement
+      orienté coqdoc. On veut pouvoir gérer coqtex de manière intelligente
+
+    - La "chaîne de compilation" est relativement bien posée. Il reste à la
+      raffiner et il faut commencer à définir également les commandes que l'on
+      veut rajouter dans le langage des .v. Egalement, il faut réfléchir sur
+      l'extensibilité du Cst.doc, et comment rendre cela accessible à
+      l'utilisateur
+    - De l'autre coté, il faut améliorer la commande parse du protocole xml,
+      pour qu'elle mette en forme le code source de coq. Mon idée, plutôt que
+      de traiter les types Vernac_expr et constr_expr est de refaire un parser
+      qui extraie les informations dont on a besoin à partir des lexemes
+      (notamment monter un cst)
+    - Coté back-end, les bases sont posées. Il faut commencer également à
+      voir ce que l'on veut donner par défaut comme éléments à l'utilisateur,
+      et réfléchir sur l'extensibilité de la sortie.
+    - L'ajout d'un format de sortie .vdoc est également à faire, cela devrait
+      être facile à faire
+    - Enfin, cf 17/10/12, il faudrait du code review sur la chaine de
+      compilation, surtout au niveau des types.
+
 17/10/12
   - On utilise des variants polymorphes pour le type Cst.doc:
       c'est cool, on est extensible en entrée et en sortie au niveau
