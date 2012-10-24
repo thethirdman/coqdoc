@@ -1,4 +1,26 @@
 ===============================================================================
+  Réunion du 24 octobre
+===============================================================================
+
+  - Refaire le type AST avec des variants polymorphes:
+      - "le caractère '`' à la rescousse", jfla 2008
+      - Jacques garrigues: variant reuse,
+
+  - Implémenter parse avec deux niveaux:
+      - Bas niveau: just au dessus du lexer, on veut seulement décorer
+        la chaîne données (keyword, literal ...)
+      - Haut niveau: reflexion, on veut à terme avoir suffisamment
+        d'informations pour pouvoir créer des hooks à partir du résultat
+        de parse. Regarde comment fait Isabella
+
+  Questions:
+    - Résolution de noms ? avoir une fonction du protocole
+      (nom relatif -> nom absolu). Réfléchir également à la gestion d'un
+      ensemble de fichiers en entrées, à la structuration des fichiers de
+      sortie, et également à ce qu'il pourrait y avoir d'autre comme éléments
+      repartis sur plusieurs fichiers (autre chose que des symboles ?)
+
+===============================================================================
   Réunion du 16 octobre
 ===============================================================================
 
