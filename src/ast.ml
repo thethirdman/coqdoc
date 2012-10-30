@@ -15,11 +15,12 @@ type query = (string * string list)
 (*FIXME: set up real type *)
 type context = unit
 
-type 'a ast_node =
-  Doc of Cst.doc
-  | Query of 'a
+type no_query = [ `Doc of Cst.doc ]
 
-type 'a ast = ('a ast_node) list
+type with_query = [`Query of query | no_query ];;
+
+type ast_with_query = with_query list
+type ast_no_query = no_query list
 
 (* Dummy function for test purposes *)
 let _ =
@@ -29,21 +30,22 @@ let _ =
 
 (** Cst.doc -> ast *)
 let rec extract_queries = function
-  `Query (name, arglist) -> Query (name, arglist)
-  | d -> Doc d
+  `Query (name, arglist) -> `Query (name, arglist)
+  | d -> `Doc d
 
 (** Cst.cst -> ast *)
 let rec translate cst =
   let rec aux elt acc = match elt with
     Cst.Doc d  -> (extract_queries d)::acc
     (*FIXME: ugliness *)
-    | Cst.Code c -> (Doc (`Content c))::acc
+    | Cst.Code c -> (`Doc (`Content c))::acc
     | _ -> acc (* FIXME: real type *) in
   List.fold_right aux cst []
 
 (* Evaluates the queries of an ast *)
 let rec eval ast =
-  let rec aux = function
-  Doc d -> Doc d
-  | Query (name, arglist) -> Doc ((Hashtbl.find symbol_table name) () arglist)
-  in List.map aux ast
+  let aux : with_query -> no_query = function
+    #no_query as q -> q
+    | `Query (name, arglist) -> `Doc ((Hashtbl.find symbol_table name) ()
+        arglist) in
+  List.map aux ast

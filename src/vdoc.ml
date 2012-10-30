@@ -24,7 +24,7 @@ let transform outc ?(f = (fun e -> None)) default_fun ast =
   let rec aux elt = match (Formatter.doc elt) with
     None -> output_string outc (default_fun elt)
     | Some s -> output_string outc s in
-  List.iter (function Ast.Doc e -> aux e |_ -> failwith "ERROR VDOC") ast;
+  List.iter (function `Doc e -> aux e |_ -> failwith "ERROR VDOC") ast;
   output_string outc (Formatter.index []); (*FIXME*)
   output_string outc (Formatter.footer ());
 end
