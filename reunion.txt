@@ -1,4 +1,14 @@
 ===============================================================================
+  Réunion du 30 octobre
+===============================================================================
+
+  - Implanter le pretty print de haut niveau; Touiller dans Pp \union Notation.
+    L'objectif est de bricoler le pretty print pour obtenir un CST dans le
+    protocole XML, incluant un type pour les notations définies pas
+    l'utilisateur (et pouvoir les récuperer après pretty print de coq)
+  - Pour la résolution de nom, aller regarder dans Kernel name
+
+===============================================================================
   Réunion du 24 octobre
 ===============================================================================
 
