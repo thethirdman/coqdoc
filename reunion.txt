@@ -7,6 +7,7 @@
     protocole XML, incluant un type pour les notations définies pas
     l'utilisateur (et pouvoir les récuperer après pretty print de coq)
   - Pour la résolution de nom, aller regarder dans Kernel name
+  - Démoniser coqtop ?
 
 ===============================================================================
   Réunion du 24 octobre

@@ -2,6 +2,52 @@
 | Development journal for coqdoc project |
 ------------------------------------------
 
+31/10/12
+                                          /\
+                                         / /
+                                      __( (__
+                                  .-'(    `' )`-.
+                                ./    `"""""'    \.
+                               /     ___   ___     \
+                              /        \\ //        \
+                             ;       /\      /\      ;
+                            ;       /O_\    /O_\      ;
+                            |            /\           |
+                            ;            ~~           ;
+                             ;     /\.        ./\    ;
+                              \   |/`\\/\/\/\//`\|  /
+                               \      \/\/\/\/     /
+                                `\               /'
+                                  `-..___..__..-'
+
+  Commande parse : la version "haut niveau" présente quelques difficultés:
+    Le module de pretty print n'offre pas de solution attractive. Sa
+    tache principale est de s'interface sur le module Format de caml, et la
+    les types qui sont gérés par ce module sont très fortement liés au
+    module format (box, break, ...). Pour ce que l'on désire dans le protocole
+    Xml, c'est fortement inadapté.
+    Ce module Pp s'interface directement avec Vernac_expr. La traduction
+    vernac_expr vers pretty print se fait par l'intermédiaire d'une fonction
+    qui traduit directement les types de vernac_expr en chaine de caractère.
+    L'approche naïve consisterait ) recoder une fonction similaire pour
+    faire une traduction vers le xml.
+
+    Ainsi, deux approchent s'offre à nous pour vernac_expr -> xml. Tout
+    d'abord une traduction naïve, imposant aux "clients" du protocole xml
+    de manipuler directement le type vernacexpr. C'est de mon point de vue une
+    mauvaise solution car:
+    1) On ne veut pas forcément tout le type vernacexpr (notamment les
+      commandes telles que undo, etc ...)
+    2) On veut une granularité différente du coté client (contrôle sur
+      les preuves uniquement, etc ...), et le type vernacexpr n'est pas du
+      tout adapté pour cela.
+    Au final, l'approche idéale consisterai à refaire un type entre vernacexpr
+    et le xml, ce type étant manipulé également du coté client. Celui devrait
+    posséder une structure pensée pour le client, et une granularité importante
+    pour offrir un controle riche du coté client ... Cependant, à l'heure
+    actuelle, je n'ai qu'une idée floue de ce que l'on désire du coté client,
+    et également de la structuration du type.
+
 22/10/12
   Ce qu'il reste à faire:
     - Avoir un front-end generique: pour l'instant, celui ci est directement
