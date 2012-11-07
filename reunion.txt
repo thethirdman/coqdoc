@@ -1,12 +1,41 @@
 ===============================================================================
+  Réunion du 07 novermbe
+===============================================================================
+
+  - Faire un type dédié pour la transformation de l'AST de coq. Celui ci
+    doit avoir les propriétés suivantes:
+      - Contenir des informations de mise en fomes (notamment des box)
+      - Avoir une représentation plus hiérarchisées que l'AST (notamment
+        des genres de catégories)
+  - Fonctoriser Pp de façon à pouvoir soit pretty printer l'ast de coq
+    soit construire _notre_ type pour le xml
+  - Faire une traduction de notre type vers le type Vdoc du coté coqdoc.
+    Possiblement enrichir le type vdoc
+
+  Idée:
+    type 'a pretty =
+      {before: string; after:string; sep:string;
+       nodes : 'a list}
+
+     type 'a proof =
+        ProofBlock of ('a proof) pretty
+      | ProofTerm of string pretty
+      | ...
+
+     type ('a)* cst =
+        Proof of ('a)*|_ Proof (* Soit un type 'a, soit un type direct ?? *)
+      | ...
+
+===============================================================================
   Réunion du 30 octobre
 ===============================================================================
 
-  - Implanter le pretty print de haut niveau; Touiller dans Pp \union Notation.
-    L'objectif est de bricoler le pretty print pour obtenir un CST dans le
-    protocole XML, incluant un type pour les notations définies pas
-    l'utilisateur (et pouvoir les récuperer après pretty print de coq)
-  - Pour la résolution de nom, aller regarder dans Kernel name
+  - On veut faire une surcouche au pretty print pour avoir
+    1) du layout 2) une conservation de la sémantique de l'ast. La solution
+    est donc de passer de 'a -> string à type 'a -> ('a string) (avec une
+    version recursive)
+  - Commande locate: ok pour les variables globales, ok pour les modules ...
+    Faire d'autres tests avec les gens qui savent coder en coq
   - Démoniser coqtop ?
 
 ===============================================================================
