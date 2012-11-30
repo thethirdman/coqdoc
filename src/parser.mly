@@ -1,13 +1,16 @@
 %token EOF STARTCOM ENDCOM STARTDOC STARTVERNAC ENDVERNAC
 %token STARTPP ENDPP STARTVERBATIM ENDVERBATIM HRULE
-%token EMPHASIS LATEX LATEX_MATH HTML ENDLST
+%token EMPHASIS LATEX LATEX_MATH HTML ENDLST ITEM
 %token <int> LST
 %token <int*string> SECTION
 %token <string> CONTENT
 %token <string*string> QUERY
 
-%start main parse_doc /* FIXME: good return type */
+%token STARTEVAL STARTEXAMPLE STARTEXAMPLESTAR ENDTEX
+
+%start main parse_doc parse_tex (* FIXME: good return type *)
 %type <string Cst.cst_node> main
+%type <Cst.doc Cst.cst_node> parse_tex
 %type <Cst.doc> parse_doc
 
 %{
@@ -28,18 +31,23 @@ STARTCOM list(CONTENT) ENDCOM
 | EOF
   {raise Cst.End_of_file}
 
-
 parse_doc:
   lst = list(parse_seq) EOF
-    {`List lst}
+    {`Seq lst}
 
 parse_seq:
   term = parse_term
     {term}
   | EMPHASIS lst=list (parse_term) EMPHASIS
-    {`Emphasis (`List lst)}
-  | LST lst=list(parse_term) ENDLST
-    {`Item ($1,(`List lst))}
+    {`Emphasis (`Seq lst)}
+  | LST lst=list(parse_lst) ENDLST
+    {`List lst}
+
+parse_lst:
+| LST lst=list(parse_lst) ENDLST
+  {`List lst}
+| ITEM c=list(parse_term)
+  {(`Item  (0,`Seq c)) }
 
 parse_term:
 STARTVERNAC CONTENT ENDVERNAC
@@ -63,5 +71,14 @@ STARTVERNAC CONTENT ENDVERNAC
 | query = QUERY
   {let (name,arglist) = query in `Query (name,(Str.split (Str.regexp ",")
   arglist))}
-(*| EOF
-  {Vdoc.List []}*)
+
+parse_tex:
+  STARTEVAL arg=CONTENT ENDTEX
+  {Cst.Doc (`Query ("tex_eval", [arg]))}
+  | STARTEXAMPLE arg=CONTENT ENDTEX
+  {Cst.Doc (`Query ("tex_example", [arg]))}
+  | STARTEXAMPLESTAR arg=CONTENT ENDTEX
+  {Cst.Doc (`Query ("tex_examplestar", [arg]))}
+  | arg=CONTENT {Cst.Code arg}
+  | EOF {raise Cst.End_of_file}
+

@@ -2,6 +2,37 @@
 | Development journal for coqdoc project |
 ------------------------------------------
 
+28/11/12
+
+Ce qu'il reste à faire pour lundi
+  - Patch le parsing/lexing des listes (avoir une structure hiérarchisée)
+    [FIXME]
+  - Gestion des environnements: [DONE]
+      - Le comportement du vieux coqdoc affiche la doc dans un div spécifique,
+        tandis que le code est dans un autre div.
+      - Il est possible d'avoir plusieurs balises Cst.Doc à la suite dans un
+        document, si oui, doit on faire une phase de fusion ou une gestion
+        des environnements ?
+  || Voir avec les annotations
+  ||Tables de symboles, gestion de la sortie de ceux ci:
+  ||  - Faire un locate pour chaque id trouvé avec parse
+  ||  - Eviter les collisions (i.e: que fait un locate sur un id rencontré
+  ||    dans un prototype ?)
+  ||Traduction des notations définies par l'utilisateur:
+  ||  - Les stocker dans une table
+  ||  - Au moment de l'écriture, faire un matching (coûteux ??)
+
+  - Implémenter les primitives de coq-tex pour la sortie html
+  - Patch le printing du code ? On reste sur parse, ou on passe à une version
+    annotée sur laquelle on fera un traitement ?
+
+  - Mettre en place un système de post traitement: je prends un fichier
+    coq-tex, je le traite pour sortir un .tex; Il pouvoir build-in le
+    post-traitement ??
+  - Commencer les .vdocs
+  - Réfléchir aux use-cases
+
+
 31/10/12
                                           /\
                                          / /

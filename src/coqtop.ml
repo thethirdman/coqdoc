@@ -132,4 +132,10 @@ let rewind coqtop i = eval_call coqtop default_logger (Serialize.rewind i)
 let search coqtop flags = eval_call coqtop default_logger (Serialize.search flags)
 let status coqtop = eval_call coqtop default_logger Serialize.status
 let parse coqtop s = eval_call coqtop default_logger (Serialize.parse s)
+let locate coqtop s = eval_call coqtop default_logger (Serialize.locate s)
+
+let handle_value = function
+  Interface.Good v | Interface.Unsafe v -> v
+  | Interface.Fail (loc,str) -> raise (Invalid_argument str)
+
 end
